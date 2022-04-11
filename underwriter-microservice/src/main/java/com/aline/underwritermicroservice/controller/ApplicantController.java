@@ -5,6 +5,7 @@ import com.aline.core.dto.request.UpdateApplicant;
 import com.aline.core.dto.response.ApplicantResponse;
 import com.aline.core.model.Applicant;
 import com.aline.underwritermicroservice.service.ApplicantService;
+import io.micrometer.core.annotation.Timed;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -65,6 +66,7 @@ public class ApplicantController {
             @ApiResponse(responseCode = "409", description = "Applicant data conflicts with other applicant data.")
     })
     @PostMapping
+    @Timed("applicant-create")
     public ResponseEntity<ApplicantResponse> createApplicant(@RequestBody @Valid CreateApplicant createApplicant) {
         ApplicantResponse applicant = service.createApplicant(createApplicant);
         URI location = ServletUriComponentsBuilder
@@ -94,6 +96,7 @@ public class ApplicantController {
             @ApiResponse(responseCode = "404", description = "Applicant does not exist.")
     })
     @GetMapping("/{id}")
+    @Timed("applicant-get-applicant-by-id")
     public ResponseEntity<ApplicantResponse> getApplicantById(@PathVariable long id) {
         ApplicantResponse applicant = service.getApplicantById(id);
         return ResponseEntity
@@ -116,6 +119,7 @@ public class ApplicantController {
             @ApiResponse(responseCode = "404", description = "Applicant to update was not found.")
     })
     @PutMapping("/{id}")
+    @Timed("applicant-update")
     public ResponseEntity<Void> updateApplicant(@PathVariable long id, @RequestBody @Valid UpdateApplicant newValues) {
         service.updateApplicant(id, newValues);
         return ResponseEntity
@@ -136,6 +140,7 @@ public class ApplicantController {
             @ApiResponse(responseCode = "404", description = "Applicant to delete was not found.")
     })
     @DeleteMapping("/{id}")
+    @Timed("applicant-delete")
     public ResponseEntity<Void> deleteApplicant(@PathVariable long id) {
         service.deleteApplicant(id);
         return ResponseEntity
@@ -156,6 +161,7 @@ public class ApplicantController {
             @ApiResponse(responseCode = "200", description = "Retrieve a populated or empty page of applicants.")
     })
     @GetMapping
+    @Timed("applicant-get-all")
     public ResponseEntity<Page<ApplicantResponse>> getApplicants(
             @PageableDefault(sort = "id", direction = Sort.Direction.ASC)
                 Pageable pageable,
