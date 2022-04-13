@@ -93,6 +93,8 @@ public class ApplicationEmailService {
      * @param response The application response that contains the status
      */
     public void sendEmailBasedOnStatus(ApplyResponse response) {
+        return;
+                /*
         switch (response.getStatus()) {
             case APPROVED:
                 sendApprovalEmail(response);
@@ -103,7 +105,7 @@ public class ApplicationEmailService {
             case DENIED:
                 sendDenialEmail(response);
                 break;
-        }
+        }*/
     }
 
 }

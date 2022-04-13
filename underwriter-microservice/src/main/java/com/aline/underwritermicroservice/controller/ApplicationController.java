@@ -5,6 +5,7 @@ import com.aline.core.dto.response.ApplicationResponse;
 import com.aline.core.dto.response.ApplyResponse;
 import com.aline.core.model.Application;
 import com.aline.underwritermicroservice.service.ApplicationService;
+import io.micrometer.core.annotation.Timed;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -59,6 +60,7 @@ public class ApplicationController {
             @ApiResponse(responseCode = "404", description = "Application does not exist.")
     })
     @GetMapping("/{id}")
+    @Timed("application-get-by-id")
     public ResponseEntity<ApplicationResponse> getApplicationById(@PathVariable long id) {
         return ResponseEntity
                 .ok()
@@ -71,6 +73,7 @@ public class ApplicationController {
             @ApiResponse(responseCode = "200", description = "Successfully retrieved paginated applications. The content array may be empty which means no applications exist.")
     })
     @GetMapping
+    @Timed("application-get-all")
     public ResponseEntity<Page<ApplicationResponse>> getAllApplications(
             @PageableDefault(sort = "id", direction = Sort.Direction.ASC)
                     Pageable pageable,
@@ -104,6 +107,7 @@ public class ApplicationController {
             @ApiResponse(responseCode = "502", description = "The application notification email was not sent.")
     })
     @PostMapping
+    @Timed("application-apply")
     public ResponseEntity<ApplyResponse> apply(@RequestBody @Valid ApplyRequest request) {
         ApplyResponse applyResponse = service.applyAndSendEmail(request);
 
